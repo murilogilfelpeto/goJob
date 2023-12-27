@@ -11,7 +11,7 @@ func OpeningRequestToOpening(request request.OpeningRequestDto) schemas.Opening 
 		Role:     request.Role,
 		Company:  request.Company,
 		Location: request.Location,
-		Remote:   request.Remote,
+		Remote:   *request.Remote,
 		Link:     request.Link,
 		Salary:   request.Salary,
 	}

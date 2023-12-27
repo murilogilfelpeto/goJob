@@ -17,6 +17,7 @@ var (
 	customValidator = validator.Validator(request.OpeningRequestDto{})
 )
 
+// CreateOpening POST v1/openings
 func CreateOpening(context *gin.Context) {
 	var requestBody request.OpeningRequestDto
 	err := context.BindJSON(&requestBody)
@@ -40,6 +41,6 @@ func CreateOpening(context *gin.Context) {
 		}
 		context.IndentedJSON(http.StatusInternalServerError, errorResponse)
 	}
-	mapper.OpeningToOpeningResponse(opening)
-	context.IndentedJSON(http.StatusCreated, opening)
+	response := mapper.OpeningToOpeningResponse(opening)
+	context.IndentedJSON(http.StatusCreated, response)
 }
