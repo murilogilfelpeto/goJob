@@ -131,3 +131,27 @@ func UpdateOpening(context *gin.Context) {
 	responseBody := mapper.OpeningToOpeningResponse(opening)
 	context.IndentedJSON(http.StatusOK, responseBody)
 }
+
+func DeleteOpening(context *gin.Context) {
+	id, err := strconv.Atoi(context.Param("id"))
+	if err != nil {
+		logger.Errorf("Error while converting id to int: %v", err)
+		errorResponse := response.ErrorDto{
+			Message:   "Error while converting id to int: " + err.Error(),
+			Timestamp: time.Now(),
+		}
+		context.IndentedJSON(http.StatusBadRequest, errorResponse)
+		return
+	}
+	err = service.DeleteOpening(id)
+	if err != nil {
+		logger.Errorf("Error while deleting opening for id %v: %v", id, err)
+		errorResponse := response.ErrorDto{
+			Message:   "Error while deleting opening for id " + strconv.Itoa(id) + ": " + err.Error(),
+			Timestamp: time.Now(),
+		}
+		context.IndentedJSON(http.StatusInternalServerError, errorResponse)
+		return
+	}
+	context.Status(http.StatusOK)
+}

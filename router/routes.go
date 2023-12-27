@@ -13,6 +13,8 @@ func initRoutes(router *gin.Engine) {
 	v1.POST("/openings", handler.CreateOpening)
 	v1.GET("/openings", handler.GetAllOpenings)
 	v1.GET("/openings/:id", handler.GetOpeningById)
+	v1.PUT("/openings/:id", handler.UpdateOpening)
+	v1.DELETE("/openings/:id", handler.DeleteOpening)
 }
 
 func ping(context *gin.Context) {
