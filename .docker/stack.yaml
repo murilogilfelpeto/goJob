@@ -17,6 +17,14 @@ services:
     restart: always
     ports:
       - "8111:8080"
+  swagger-ui:
+    image: mrin9/rapidoc
+    container_name: go-job-swagger
+    environment:
+      SPEC_URL: http://localhost:5000/v1/openapi
+      RAPIDOC_OPTIONS: "theme='dark' allow-authentication='true' api-key-name='Authorization' api-key-value='Bearer XPTO' api-key-location='header' "
+    ports:
+      - "8112:80"
   nginx:
     image: nginx:latest
     volumes:

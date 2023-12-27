@@ -1,0 +1,193 @@
+definitions:
+  request.OpeningRequestDto:
+    properties:
+      company:
+        type: string
+      link:
+        type: string
+      location:
+        type: string
+      remote:
+        type: boolean
+      role:
+        type: string
+      salary:
+        type: integer
+    required:
+    - company
+    - link
+    - location
+    - remote
+    - role
+    - salary
+    type: object
+  response.ErrorDto:
+    properties:
+      field: {}
+      message:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  response.OpeningResponseDto:
+    properties:
+      company:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      link:
+        type: string
+      location:
+        type: string
+      remote:
+        type: boolean
+      role:
+        type: string
+      salary:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /opening/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an opening based on the provided ID.
+      parameters:
+      - description: Opening ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+      summary: Delete Opening
+      tags:
+      - Opening
+    get:
+      consumes:
+      - application/json
+      description: Retrieves an opening by its ID
+      parameters:
+      - description: Opening ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.OpeningResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+      summary: Get an opening by ID
+      tags:
+      - Opening
+    put:
+      consumes:
+      - application/json
+      description: Update an existing opening by ID
+      operationId: update-opening
+      parameters:
+      - description: Opening ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated opening data
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/request.OpeningRequestDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated opening
+          schema:
+            $ref: '#/definitions/response.OpeningResponseDto'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+      summary: Update an opening
+  /openings:
+    get:
+      description: Retrieve all openings and return them in JSON format
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.OpeningResponseDto'
+        "204":
+          description: No openings found
+        "500":
+          description: Internal server error
+      summary: Get all openings
+  /v1/openings:
+    post:
+      consumes:
+      - application/json
+      description: Create a new opening
+      parameters:
+      - description: Opening request body
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/request.OpeningRequestDto'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.OpeningResponseDto'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorDto'
+      summary: Create an opening
+      tags:
+      - openings
+swagger: "2.0"

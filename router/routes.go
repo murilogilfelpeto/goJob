@@ -15,6 +15,7 @@ func initRoutes(router *gin.Engine) {
 	v1.GET("/openings/:id", handler.GetOpeningById)
 	v1.PUT("/openings/:id", handler.UpdateOpening)
 	v1.DELETE("/openings/:id", handler.DeleteOpening)
+	v1.GET("/openapi", handler.OpenApi)
 }
 
 func ping(context *gin.Context) {

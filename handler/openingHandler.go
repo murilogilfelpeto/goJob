@@ -17,7 +17,19 @@ var (
 	customValidator = validator.Validator(request.OpeningRequestDto{})
 )
 
-// CreateOpening POST v1/openings
+// CreateOpening handles the POST request to /v1/openings.
+// It binds the JSON request body to an OpeningRequestDto,
+// saves the opening, and returns the created OpeningResponseDto.
+// @Summary Create an opening
+// @Description Create a new opening
+// @Tags openings
+// @Accept json
+// @Produce json
+// @Param requestBody body request.OpeningRequestDto true "Opening request body"
+// @Success 201 {object} response.OpeningResponseDto
+// @Failure 422 {object} response.ErrorDto
+// @Failure 500 {object} response.ErrorDto
+// @Router /v1/openings [post]
 func CreateOpening(context *gin.Context) {
 	var requestBody request.OpeningRequestDto
 	err := context.BindJSON(&requestBody)
@@ -47,6 +59,14 @@ func CreateOpening(context *gin.Context) {
 	context.IndentedJSON(http.StatusCreated, responseBody)
 }
 
+// GetAllOpenings
+// @Summary Get all openings
+// @Description Retrieve all openings and return them in JSON format
+// @Produce json
+// @Success 200 {object} response.OpeningResponseDto
+// @Failure 204 "No openings found"
+// @Failure 500 "Internal server error"
+// @Router /openings [get]
 func GetAllOpenings(context *gin.Context) {
 	openings, err := service.FindAll()
 	if err != nil {
@@ -68,6 +88,17 @@ func GetAllOpenings(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, responseBody)
 }
 
+// GetOpeningById retrieves an opening by its ID
+// @Summary Get an opening by ID
+// @Description Retrieves an opening by its ID
+// @Tags Opening
+// @Accept json
+// @Produce json
+// @Param id path int true "Opening ID"
+// @Success 200 {object} response.OpeningResponseDto
+// @Failure 400 {object} response.ErrorDto
+// @Failure 500 {object} response.ErrorDto
+// @Router /opening/{id} [get]
 func GetOpeningById(context *gin.Context) {
 	id, err := strconv.Atoi(context.Param("id"))
 	if err != nil {
@@ -95,6 +126,20 @@ func GetOpeningById(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, responseBody)
 }
 
+// UpdateOpening is a handler function for updating an opening.
+// It expects the ID of the opening in the URL path and the updated opening data in the request body.
+// @Summary Update an opening
+// @Description Update an existing opening by ID
+// @ID update-opening
+// @Accept json
+// @Produce json
+// @Param id path int true "Opening ID"
+// @Param requestBody body request.OpeningRequestDto true "Updated opening data"
+// @Success 200 {object} response.OpeningResponseDto "Updated opening"
+// @Failure 400 {object} response.ErrorDto "Bad Request"
+// @Failure 422 {object} response.ErrorDto "Unprocessable Entity"
+// @Failure 500 {object} response.ErrorDto "Internal Server Error"
+// @Router /opening/{id} [put]
 func UpdateOpening(context *gin.Context) {
 	id, err := strconv.Atoi(context.Param("id"))
 	if err != nil {
@@ -132,6 +177,16 @@ func UpdateOpening(context *gin.Context) {
 	context.IndentedJSON(http.StatusOK, responseBody)
 }
 
+// @Summary Delete Opening
+// @Description Deletes an opening based on the provided ID.
+// @Tags Opening
+// @Accept json
+// @Produce json
+// @Param id path int true "Opening ID"
+// @Success 200
+// @Failure 400 {object} response.ErrorDto "Bad Request"
+// @Failure 500 {object} response.ErrorDto "Internal Server Error"
+// @Router /opening/{id} [delete]
 func DeleteOpening(context *gin.Context) {
 	id, err := strconv.Atoi(context.Param("id"))
 	if err != nil {
