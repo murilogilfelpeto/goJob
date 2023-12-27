@@ -9,7 +9,7 @@ import (
 func InitializeMySql() (*gorm.DB, error) {
 	logger := GetLogger("mysql")
 	logger.Info("Initializing MySQL connection")
-	const url = "root:admin@tcp(localhost:3306)/go-job"
+	const url = "root:admin@tcp(localhost:3306)/go-job?parseTime=true"
 	connection, err := gorm.Open(mysql.Open(url), &gorm.Config{})
 	if err != nil {
 		logger.Errorf("Error initializing MySQL connection: %v", err)

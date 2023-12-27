@@ -6,6 +6,14 @@ import (
 	"github.com/murilogilfelpeto/goJob/schemas"
 )
 
+func OpeningsToOpeningsResponse(openings []schemas.Opening) []response.OpeningResponseDto {
+	var response []response.OpeningResponseDto
+	for _, opening := range openings {
+		response = append(response, OpeningToOpeningResponse(opening))
+	}
+	return response
+}
+
 func OpeningRequestToOpening(request request.OpeningRequestDto) schemas.Opening {
 	return schemas.Opening{
 		Role:     request.Role,
