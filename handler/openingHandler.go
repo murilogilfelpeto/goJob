@@ -94,3 +94,40 @@ func GetOpeningById(context *gin.Context) {
 	responseBody := mapper.OpeningToOpeningResponse(opening)
 	context.IndentedJSON(http.StatusOK, responseBody)
 }
+
+func UpdateOpening(context *gin.Context) {
+	id, err := strconv.Atoi(context.Param("id"))
+	if err != nil {
+		logger.Errorf("Error while converting id to int: %v", err)
+		errorResponse := response.ErrorDto{
+			Message:   "Error while converting id to int: " + err.Error(),
+			Timestamp: time.Now(),
+		}
+		context.IndentedJSON(http.StatusBadRequest, errorResponse)
+		return
+	}
+	requestBody := request.OpeningRequestDto{}
+	err = context.BindJSON(&requestBody)
+	if err != nil {
+		logger.Errorf("Error while binding JSON: %v", err)
+		errorResponse := response.ErrorDto{
+			Message:   "Error while binding JSON",
+			Timestamp: time.Now(),
+			Field:     customValidator.DecryptErrors(err),
+		}
+		context.IndentedJSON(http.StatusUnprocessableEntity, errorResponse)
+		return
+	}
+	updatedOpening := mapper.OpeningRequestToOpening(requestBody)
+	opening, err := service.UpdateOpening(id, updatedOpening)
+	if err != nil {
+		errorResponse := response.ErrorDto{
+			Message:   "Error while converting id to int: " + err.Error(),
+			Timestamp: time.Now(),
+		}
+		context.IndentedJSON(http.StatusInternalServerError, errorResponse)
+		return
+	}
+	responseBody := mapper.OpeningToOpeningResponse(opening)
+	context.IndentedJSON(http.StatusOK, responseBody)
+}
